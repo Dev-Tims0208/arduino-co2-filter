@@ -1,3 +1,4 @@
+
 ///////////////////////////////////
 // MQ-135 Gas sensor YT Tutorial //
 //        ArduinoCraft           //
@@ -17,9 +18,12 @@ void setup() {
   // initialization of communication over the serial link
   // at 9600 baud
   Serial.begin(9600); 
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
   lcd.begin(); 
 	// Turn on the blacklight and print a message.
 	lcd.backlight(); 
+
 }
 void loop() {
   // reading the gas concentration in ppm into the variable
@@ -29,6 +33,20 @@ void loop() {
   // print the measured concentration
   //lcd.print("mama mo");
   lcd.clear();
-  lcd.print(String(ppm) + " CO2 (PPM)"); 
-  delay(200);
+  lcd.print(String(ppm) + " CO2 (PPM)");
+  
+  if(ppm > 1){
+    if(digitalRead(9) != HIGH){
+      tone(9, 1500);
+    }
+    if(digitalRead(8) != HIGH){
+      digitalWrite(8, HIGH);
+    }
+  }
+  else{
+    noTone(9);
+    digitalWrite(8, LOW);
+  }
+
+  delay(1000);
 }
